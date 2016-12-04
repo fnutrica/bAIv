@@ -3,46 +3,34 @@ import math
 
 class Customer(object):
 
-    def __init__(self, preference, minTip, behavioral, price):
-        self.behavioral = behavioral
-        self.price = price
-        self.minTip = minTip
-        self.preference = preference
+    def __init__(self, food_preferences, expected_tip):
+        self.food_preferences = food_preferences
+        self.expected_tip = self.expected_tip
+        self.value = None
+        self.ltm = random.randint(0,100) # likelihood to mutate
+        self.ltc = random.randint(0,100) # likelihood to crossover
 
-        self.adjustedTip = self.adjustTip()
-        self.value = self.heuristic()
+    def expected_tip(self):
+        return self.expected_tip
 
+    def set_expected_tip(self, tip):
+        self.expected_tip = tip
+        return self.expected_tip
 
-    def minTip(self):
-        return self.minTip
+    def set_food_preferences(self, pref):
+        self.food_preferences = pref
+        return self.food_preferences
 
-    def preference(self):
-        return self.preference
-
-    def set_minTip(self, tip):
-        self.minTip = tip
-        return self.minTip
-
-    def set_preference(self, pref):
-        self.preference = pref
-        return self.preference
-
+#   move this to tipping_sim
     def mutation(self):
         mut = random.uniform(0.9, 1.1)
-        self.minTip = self.minTip * mut
+        self.expected_tip = self.expected_tip * mut
         return self
 
-    def adjustTip(self):
-        self.adjustedTip = self.minTip + self.behavioral
-        return self.adjustedTip
+    def heuristic(self, price_paid, tip_paid):
+        self.value = 1 - tip_paid/
+        return 1- tip_paid/price_paid
 
-    def adjustPref(self, utility):
-        self.preference += utility
-        return self.preference
-
-    def heuristic(self):
-        self.value = self.price / (self.price + self.price * self.adjustedTip)
-        return self.value
 
     def printCustomer(self):
         print("Minimum Tip = ", self.minTip)
