@@ -1,19 +1,20 @@
 import random
 import math
 import Customer
+import Restaurant
 
 PRICE = 100
 MAX = 1
 MIN = 0
-#N_RESTAURANT = 20
+N_RESTAURANT = 20
 N_CUSTOMERS = 10
-GENERATIONS = 10
+MAX_GENERATIONS = 10
 
 def tipping_sim():
 
-    pop = []
+    cust_pop = []
+    rest_pop = []
 
-    init_pref = 50
     for i in range(0, N_CUSTOMERS):
         minTip = random.uniform(MIN, MAX)
         behavioral = random_behavior()
@@ -30,7 +31,7 @@ def tipping_sim():
     foundEquilibrium = False
     count = 0
 
-    while (not foundEquilibrium) and count < GENERATIONS:
+    while (not foundEquilibrium) and count < MAX_GENERATIONS:
         count += 1
         print("================ Generation ", count, " ================")
 
@@ -103,10 +104,6 @@ def mateParents(parents):
 
     return newPop
 
-"""
-# what is a random move? - +/- minTip? bit-string?
-"""
-
 # cross point? not random right now bc there's only 2 variables
 def crossover(customer1, customer2):
     pref1 = customer1.preference
@@ -121,9 +118,3 @@ def crossover(customer1, customer2):
     newCust2 = Customer.Customer(pref2, tip1, behav, PRICE)
 
     return [newCust1, newCust2]
-
-
-"""
-# what do i cross? - minTip? bit string?
-# How do I cross? - average? split?
-"""

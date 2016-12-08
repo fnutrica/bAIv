@@ -3,36 +3,37 @@ import math
 
 class Customer(object):
 
-    def __init__(self, food_preferences, expected_tip):
-        self.food_preferences = food_preferences
-        self.expected_tip = self.expected_tip
+    def __init__(self, foodPref, expectedTip):
+        self.foodPref = foodPref
+        self.expectedTip = self.expectedTip
+
+        self.experience = experience(price, randomTip)
         self.value = None
+
         self.ltm = random.randint(0,100) # likelihood to mutate
         self.ltc = random.randint(0,100) # likelihood to crossover
 
-    def expected_tip(self):
+    def getExpectedTip(self):
         return self.expected_tip
 
-    def set_expected_tip(self, tip):
-        self.expected_tip = tip
-        return self.expected_tip
+    def getFoodPref(self, pref):
+        return self.foodPref
 
-    def set_food_preferences(self, pref):
-        self.food_preferences = pref
-        return self.food_preferences
+    def setExpectedTip(self, tip):
+        self.expectedTip = tip
+        return self.expectedTip
 
-#   move this to tipping_sim
-    def mutation(self):
-        mut = random.uniform(0.9, 1.1)
-        self.expected_tip = self.expected_tip * mut
-        return self
+    def setFoodPref(self, pref):
+        self.foodPref = pref
+        return self.foodPref
 
-    def heuristic(self, price_paid, tip_paid):
-        self.value = 1 - tip_paid/
-        return 1- tip_paid/price_paid
-
+    def experience(self, price, randomTip):
+        pricePaid = price + randomTip
+        gap = self.expectedTip - randomTip
+        self.experience = gap / pricePaid
+        return self.experience
 
     def printCustomer(self):
-        print("Minimum Tip = ", self.minTip)
-        print("Tipping Restaurant = ", self.preference, "%")
+        print("Expected Tip = ", self.expectedTip)
+        print("Food Preference = ", self.foodPref)
         print("Heuristic = ", self.value)
