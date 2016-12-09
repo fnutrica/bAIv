@@ -34,6 +34,18 @@ class Restaurant(object):
                               "Sub": random.randint(0, 1),
                               "Rural": random.randint(0, 1)}
 
+        self.price = price_per_unit()
+        self.cost = cost_per_unit()
+
+    def price_per_unit(self):
+        self.price = 100
+        return self.price
+
+    def cost_per_unit(self):
+        rent = 
+        labor = self.service_lv * 0.3
+        return self.cost
+
     def printRestaurant(self):
         print("Score = ", self.score)
         print("Food Type = ", self.food_type)
