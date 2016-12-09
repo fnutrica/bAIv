@@ -21,29 +21,47 @@ class Restaurant(object):
         if food_type != None:
             self.food_type = food_type
         else:
-            self.food_type = {"Pizza": random.randint(0, 1),
-                              "Indian": random.randint(0, 1),
-                              "Burger":random.randint(0,1),
-                              "Shish":random.randint(0,1)}
+            type = ["Pizza", "Indian", "Burger", "Shish"]
+            self.food_type = random.choice(type)
 
         # Food Type
         if location != None:
             self.location = location
         else:
-            self.food_type = {"Urban": random.randint(0, 1),
-                              "Sub": random.randint(0, 1),
-                              "Rural": random.randint(0, 1)}
+            loc = ["Urban", "Sub", "Rural"]
+            self.location = random.choice(loc)
 
-        self.price = price_per_unit()
-        self.cost = cost_per_unit()
+        self.price = unit_price()
+        self.cost = unit_cost()
 
-    def price_per_unit(self):
+    def unit_price(self):
         self.price = 100
         return self.price
 
-    def cost_per_unit(self):
-        rent = 
-        labor = self.service_lv * 0.3
+    def unit_cost(self):
+        #Cost of Food
+        if self.food_type == "Pizza":
+            food = 20
+        elif self.location == "Indian":
+            food = 30
+        elif self.location == "Burger":
+            food = 25
+        else:
+            food = 35
+        
+        # Cost of Rent
+        if self.location == "Urban":
+            rent = 30
+        elif self.location == "Sub":
+            rent = 25
+        else:
+            rent = 20
+
+        # Cost of Labor
+        labor = int(self.service_lv * 0.3)
+
+        self.cost = food + rent + labor
+
         return self.cost
 
     def printRestaurant(self):
