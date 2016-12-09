@@ -6,26 +6,25 @@ import Restaurant
 PRICE = 100
 MAX = 1
 MIN = 0
-N_RESTAURANT = 20
+N_RESTAURANTS = 20
 N_CUSTOMERS = 10
 MAX_GENERATIONS = 10
 
 def tipping_sim():
 
-    cust_pop = []
-    rest_pop = []
+    customer_pop = []
+    restaurant_pop = []
 
     for i in range(0, N_CUSTOMERS):
-        minTip = random.uniform(MIN, MAX)
-        behavioral = random_behavior()
-        pop.append(Customer.Customer(init_pref, minTip, behavioral, PRICE))
+        customer_pop.append(Customer.Customer())
+
+    for i in range(0, N_RESTAURANTS):
+        restaurant_pop.append(Restaurant.Restaurant())
 
     print("================ Initial States ================")
 
-    for i in range(0,len(pop)):
-        curr = pop[i]
-        print("Customer #", i)
-        curr.printCustomer()
+    for customer in customer_pop:
+       print("Customer ", id(customer))
 
     #always false
     foundEquilibrium = False
@@ -113,7 +112,6 @@ def crossover(customer1, customer2):
 
     #new random behavior assigned
     behav = random_behavior()
-
     newCust1 = Customer.Customer(pref1, tip2, behav, PRICE)
     newCust2 = Customer.Customer(pref2, tip1, behav, PRICE)
 
