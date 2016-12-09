@@ -3,20 +3,40 @@ import math
 
 class Restaurant(object):
 
-    def __init__(self, randomTip, price):
-        self.randomTip = randomTip
-        self.price = price
+    def __init__(self, score = 0, food_type = None, location = None, service_lv = None):
 
-    def getTip(self):
-        return self.randomTip
+        # Resturant Score
+        if score != 0:
+            self.score = score
+        else:
+            self.score = 2.5
 
-    def getPrice(self):
-        return self.price
+        # Service Level
+        if service_lv != None:
+            self.service_lv = service_lv
+        else:
+            self.service_lv = random.randint(0, 100)
 
-    def setTip(self, tip):
-        self.randomTip = tip
-        return self.randomTip
+        # Food Type
+        if food_type != None:
+            self.food_type = food_type
+        else:
+            self.food_type = {"Pizza": random.randint(0, 1),
+                              "Indian": random.randint(0, 1),
+                              "Burger":random.randint(0,1),
+                              "Shish":random.randint(0,1)}
 
-    def setPrice(self, tip):
-        self.randomTip = tip
-        return self.randomTip
+        # Food Type
+        if location != None:
+            self.location = location
+        else:
+            self.food_type = {"Urban": random.randint(0, 1),
+                              "Sub": random.randint(0, 1),
+                              "Rural": random.randint(0, 1)}
+
+    def printRestaurant(self):
+        print("Score = ", self.score)
+        print("Food Type = ", self.food_type)
+        print("Location = ", self.location)
+        print("Service Level = ", self.service_lv)
+
