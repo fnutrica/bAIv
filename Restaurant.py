@@ -1,6 +1,10 @@
 import random
 import math
 
+FOOD_TYPE = {"Pizza": 20, "Burger": 25, "Indian": 30, "Shish": 35}
+LOCATION = {"Urban": 30, "Sub": 25, "Rural": 20}
+
+
 class Restaurant(object):
 
     def __init__(self, score = 0, food_type = None, location = None, service_lv = None):
@@ -21,15 +25,13 @@ class Restaurant(object):
         if food_type != None:
             self.food_type = food_type
         else:
-            type = ["Pizza", "Indian", "Burger", "Shish"]
-            self.food_type = random.choice(type)
+            self.food_type = random.choice(FOOD_TYPE.keys())
 
         # Food Type
         if location != None:
             self.location = location
         else:
-            loc = ["Urban", "Sub", "Rural"]
-            self.location = random.choice(loc)
+            self.location = random.choice(LOCATION.keys())
 
         self.price = unit_price()
         self.cost = unit_cost()
@@ -40,22 +42,10 @@ class Restaurant(object):
 
     def unit_cost(self):
         #Cost of Food
-        if self.food_type == "Pizza":
-            food = 20
-        elif self.location == "Indian":
-            food = 30
-        elif self.location == "Burger":
-            food = 25
-        else:
-            food = 35
+        food = FOOD_TYPE.get(self.food_type)
         
         # Cost of Rent
-        if self.location == "Urban":
-            rent = 30
-        elif self.location == "Sub":
-            rent = 25
-        else:
-            rent = 20
+        rent = LOCATION.get(self.location)
 
         # Cost of Labor
         labor = int(self.service_lv * 0.3)
