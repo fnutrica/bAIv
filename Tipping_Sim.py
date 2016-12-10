@@ -3,15 +3,10 @@ import math
 import Customer
 import Restaurant
 
-<<<<<<< Updated upstream
 PRICE = 100
 MAX = 1
 MIN = 0
 N_RESTAURANTS = 20
-=======
-MARKET_PRICE = 100
-N_RESTAURANT = 10
->>>>>>> Stashed changes
 N_CUSTOMERS = 10
 MAX_GENERATIONS = 10
 
@@ -22,39 +17,34 @@ def tipping_sim():
 
     # generates random population of customers
     for i in range(0, N_CUSTOMERS):
-<<<<<<< Updated upstream
         customer_pop.append(Customer.Customer())
 
-    for i in range(0, N_RESTAURANTS):
-        restaurant_pop.append(Restaurant.Restaurant())
 
     print("================ Initial States ================")
 
     for customer in customer_pop:
-       print("Customer ", id(customer))
-=======
+        print("Customer ", id(customer))
         foodPref = random.uniform(1, 5)
-        # expected value of random tip (between 0 and 100)
+#expected value of random tip (between 0 and 100)
         expTip = 25
-        cust_pop.append(Customer.Customer(foodPref, expTip))
+        customer_pop.append(Customer.Customer(foodPref, expTip))
 
     # generates random population of restaurants
-    for i in range(0, N_RESTAURANT):
+    for i in range(0, N_RESTAURANTS):
         randTip = random.uniform(0, 50)
         price = random.uniform(0, 100)
-        rest_pop.append(Restaurant.Restaurant(randTip, price))
+        restaurant_pop.append(Restaurant.Restaurant(randTip, price))
 
     print("================ Initial States ================")
 
     #############WORK FROM HERE
 
-    for i in range(0,len(cust_pop)-1):
-        curr = cust_pop[i]
+    for i in range(0,len(customer_pop)-1):
+        curr = customer_pop[i]
         print("Customer #", i)
         curr.printCustomer()
->>>>>>> Stashed changes
 
-    # always false for now
+#always false for now
     foundEquilibrium = False
     count = 0
 
@@ -63,20 +53,20 @@ def tipping_sim():
         print("================ Generation ", count, " ================")
 
         #array of heuristics
-        fits = [cust.value for cust in pop]
+        fits = [cust.value for cust in customer_pop]
 
         print("Average fitness:", sum(fits) / len(fits))
         print("Max fitness:", max(fits))
         print("Min fitness:", min(fits))
 
-        parentPool = selectParents(pop, fits)
+        parentPool = selectParents(customer_pop, fits)
         currPop = mateParents(parentPool)
 
         print(" ")
         printCustomers(currPop)
 
-        pop.clear()
-        pop.extend(currPop)
+        customer_pop.clear()
+        customer_pop.extend(currPop)
 
     print("================ Done ================")
     print("Summary...")
