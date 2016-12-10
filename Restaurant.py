@@ -1,5 +1,4 @@
 import random
-import math
 
 FOOD_TYPE = {"Pizza": 20, "Burger": 25, "Indian": 30, "Shish": 35}
 LOCATION = {"Urban": 30, "Sub": 25, "Rural": 20}
@@ -50,7 +49,7 @@ class Restaurant(object):
         # Cost of Labor
         labor = int(self.service_lv * 0.3)
 
-        self.cost = food*q_sold + rent + labor*q_sold
+        self.cost = food * q_sold + rent + labor * q_sold
 
         return self.cost
 
