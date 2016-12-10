@@ -6,8 +6,8 @@ import Restaurant
 PRICE = 100
 MAX = 1
 MIN = 0
-N_RESTAURANTS = 20
-N_CUSTOMERS = 10
+N_RESTAURANTS = 10
+N_CUSTOMERS = 20
 MAX_GENERATIONS = 10
 
 def tipping_sim():
@@ -15,58 +15,58 @@ def tipping_sim():
     customer_pop = []
     restaurant_pop = []
 
-    # generates random population of customers
-    for i in range(0, N_CUSTOMERS):
-        customer_pop.append(Customer.Customer())
-
-
-    print("================ Initial States ================")
-
-    for customer in customer_pop:
-        print("Customer ", id(customer))
-        foodPref = random.uniform(1, 5)
-#expected value of random tip (between 0 and 100)
-        expTip = 25
-        customer_pop.append(Customer.Customer(foodPref, expTip))
-
-    # generates random population of restaurants
-    for i in range(0, N_RESTAURANTS):
-        randTip = random.uniform(0, 50)
-        price = random.uniform(0, 100)
-        restaurant_pop.append(Restaurant.Restaurant(randTip, price))
+    # generate random population
+    customer_pop.extend(generate_random_pop(N_CUSTOMERS, Customer))
+    restaurant_pop.extend(generate_random_pop(N_RESTAURANTS, Restaurant))
 
     print("================ Initial States ================")
 
-    #############WORK FROM HERE
+    # for printing
+    for i in range(0,len(restaurant_pop)-1):
+        current = restaurant_pop[i]
+        print("Restaurant #", i)
+        current.printRestaurant()
 
-    for i in range(0,len(customer_pop)-1):
-        curr = customer_pop[i]
-        print("Customer #", i)
-        curr.printCustomer()
-
-#always false for now
-    foundEquilibrium = False
     count = 0
-
-    while (not foundEquilibrium) and count < MAX_GENERATIONS:
+    while count < MAX_GENERATIONS:
         count += 1
+
+        # for customer choosing restaurant
+        for customer in customer_pop:
+            for restaurant in restaurant_pop:
+                customer.set_expectations(restaurant)
+
+                values = []
+
+                for i in range(0, len(customer.expected_scores) - 1):
+                    values.append(customer.expected_scores[i].expectation)
+
+                index = rouletteSelect(values)
+                choice = customer.expected_scores[index].restaurant
+
+                # updates restaurant's score
+                customer.score_restaurant(choice)
+
         print("================ Generation ", count, " ================")
 
-        #array of heuristics
-        fits = [cust.value for cust in customer_pop]
+        # evolve restaurant
+        restaurantScores = [restaurant.score for restaurant in restaurant_pop]
+        newRestaurants = evolve(restaurant_pop, restaurantScores)
+        restaurant_pop.clear()
+        restaurant_pop.extend(newRestaurants)
 
-        print("Average fitness:", sum(fits) / len(fits))
-        print("Max fitness:", max(fits))
-        print("Min fitness:", min(fits))
+        # print restaurant attributes
+        printRestaurants(restaurant_pop)
 
-        parentPool = selectParents(customer_pop, fits)
-        currPop = mateParents(parentPool)
+        print("Average score:", sum(restaurantScores) / len(restaurantScores))
+        print("Max score:", max(restaurantScores))
+        print("Min score:", min(restaurantScores))
 
-        print(" ")
-        printCustomers(currPop)
-
+        # randomly evolve customer (constant heuristics)
+        customerHeuristics = [customer.heuristic for customer in customer_pop]
+        newCustomers = evolve(customer_pop, customerHeuristics)
         customer_pop.clear()
-        customer_pop.extend(currPop)
+        customer_pop.extend(newCustomers)
 
     print("================ Done ================")
     print("Summary...")
@@ -75,12 +75,25 @@ def tipping_sim():
 
     return count
 
+def generate_random_pop(n, object):
+    pop = []
+    for i in range(0, n):
+        pop.append(object.object())
+    return pop
+
+def evolve(pop, heuristic):
+    newPop = []
+    parentPool = selectParents(pop, heuristic)
+    currPop = mateParents(parentPool)
+    newPop.extend(currPop)
+    return newPop
+
 def random_behavior():
     return random.uniform(-1, 1)
 
-def printCustomers(neighList):
+def printRestaurants(neighList):
     for neigh in neighList:
-        neigh.printCustomer()
+        neigh.printRestaurant()
 
 #============================================================================================
 
@@ -102,9 +115,9 @@ def selectParents(states, fitnesses):
         parents.append(states[nextParentPos])
     return parents
 
+#############CHANGE THIS TO MATCH THE NEW CLASSES##############
 def mateParents(parents):
     newPop = []
-
     for i in range(0, len(parents), 2):
         p1 = parents[i]
         p2 = parents[i+1]

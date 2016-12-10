@@ -6,7 +6,7 @@ LOCATION = {"Urban": 30, "Sub": 25, "Rural": 20}
 
 class Restaurant(object):
 
-    def __init__(self, score=0, food_type=None, location=None, service_lv=None):
+    def __init__(self, score=0, food_type=None, location=None, service_lv=None, tip=None):
 
         # Resturant Score
         if score != 0:
@@ -26,14 +26,26 @@ class Restaurant(object):
         else:
             self.food_type = random.choice(FOOD_TYPE.keys())
 
-        # Food Type
+        # Location
         if location is not None:
             self.location = location
         else:
             self.location = random.choice(LOCATION.keys())
 
+
+        # Tip (80% chance of being tipping restaurant)
+        if tip is not None:
+            self.tip = tip
+        else:
+            rand = random.randint(0, 100)
+            if rand > 80:
+                self.tip = False
+            else:
+                self.tip = True
+
         self.price = self.unit_price()
         self.cost = self.unit_cost()
+        self.n_scores = 0
 
     def unit_price(self):
         self.price = 100
