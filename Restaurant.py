@@ -43,7 +43,7 @@ class Restaurant(object):
     def tot_cost(self, q_sold):
         #Cost of Food
         food = FOOD_TYPE.get(self.food_type)
-        
+
         # Cost of Rent
         rent = LOCATION.get(self.location)
 
