@@ -139,9 +139,14 @@ def crossover(agent1, agent2, n_cross):
 
     targets = random.sample(range(0,N_ATTRIBUTES),n_cross)
 
+    print(targets)
+
     for i in targets:
         attribute1 = agent1.get_e_attribute(i)
         attribute2 = agent2.get_e_attribute(i)
+
+        print(attribute1)
+        print(attribute2)
 
         agent1.set_e_attribute(i, attribute2)
         agent2.set_e_attribute(i, attribute1)

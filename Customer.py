@@ -8,13 +8,12 @@ class Customer(object):
                         location_pref={"Urban": random.uniform(0, 1), "Sub": random.uniform(0, 1),"Rural": random.uniform(0, 1)},
                         pe_happiness=random.uniform(0, 1)):
 
-
-        self.e_attributes = ["food_pref", "service_val", "location_pref", "self.pe_happiness"]
         self.food_pref = food_pref
         self.service_val = service_val
         self.location_pref = location_pref
         self.pe_happiness = pe_happiness
         self.expected_scores = []
+        self.e_attributes = [self.food_pref, self.service_val, self.location_pref, self.pe_happiness]
 
     def get_e_attribute(self, index):
         return self.e_attributes[index]

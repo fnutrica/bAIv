@@ -13,12 +13,12 @@ class Restaurant(object):
         self.price = self.unit_price()
         self.score = 2.5
         self.n_scores = 0
-        self.e_attributes = ["food_type", "location", "service_lv", "tip"] # can i have just the names as string?????
 
         self.service_lv = service_lv
         self.food_type = food_type
         self.location = location
         self.tip = tip
+        self.e_attributes = [self.food_type, self.location, self.service_lv, self.tip]
 
         # Tip (80% chance to be tipping restaurant)
         if self.tip > 80:
@@ -67,13 +67,13 @@ class Restaurant(object):
     def mutate(self):
 
         # choose from four attributes & make random change of >+/-10%
-        #rand = random.randint(1,4)
-        rand =3
-        if rand == 1:
+        #rand = random.randint(0,3)
+        rand=2
+        if rand == 0:
             FOOD_TYPE[self.food_type] += random.randint[-2,2]
-        elif rand == 2:
+        elif rand == 1:
             LOCATION[self.location] += random.randint[-2,2]
-        elif rand == 3:
+        elif rand == 2:
             print("I am the service lv")
             print(self.service_lv)
             self.service_lv += random.uniform[-0.1,0.1]
