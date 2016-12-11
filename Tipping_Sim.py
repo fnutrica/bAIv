@@ -41,10 +41,10 @@ def tipping_sim():
                 values = []
 
                 for i in range(len(customer.expected_scores)):
-                    values.append(customer.expected_scores[i].expectation)
+                    values.append(customer.expected_scores[i]["expectation"])
 
-                index = rouletteSelect(values)
-                choice = customer.expected_scores[index].restaurant
+                choice = rouletteSelect(values)
+                print("my choice is " + str(choice))
 
                 # updates restaurant's score
                 customer.score_restaurant(choice)
@@ -115,7 +115,7 @@ def mateParents(parents):
         p2 = parents[i+1]
 
         # exactly 4 attributes to be swapped for both Customer and Restaurant
-        n_cross = random.choice(0, N_ATTRIBUTES)
+        n_cross = random.randint(0, N_ATTRIBUTES)
 
         if n_cross == 0:
             newPop.append(p1)
@@ -131,13 +131,13 @@ def mateParents(parents):
 
         # 50% chance of mutation
         if doMutate <= 0.5:
-            newPop[i] = nextOne.mutation()
+            newPop[i] = nextOne.mutate()
 
     return newPop
 
 def crossover(agent1, agent2, n_cross):
 
-    targets = random.sample(0,N_ATTRIBUTES-1,n_cross)
+    targets = random.sample(range(0,N_ATTRIBUTES),n_cross)
 
     for i in targets:
         attribute1 = agent1.get_e_attribute(i)
@@ -147,3 +147,5 @@ def crossover(agent1, agent2, n_cross):
         agent2.set_e_attribute(i, attribute1)
 
     return [agent1, agent2]
+
+

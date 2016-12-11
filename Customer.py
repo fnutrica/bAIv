@@ -3,8 +3,10 @@ import random
 
 class Customer(object):
 
-    def __init__(self, food_pref={"Pizza": random.uniform(0, 1), "Indian": random.uniform(0, 1),
-                              "Burger": random.uniform(0, 1), "Shish": random.uniform(0, 1)}, service_val=random.uniform(0, 1), location_pref={"Urban": random.uniform(0, 1), "Sub": random.uniform(0, 1),"Rural": random.uniform(0, 1)}, pe_happiness=random.uniform(0, 1)):
+    def __init__(self, food_pref={"Pizza": random.uniform(0, 1), "Indian": random.uniform(0, 1), "Burger": random.uniform(0, 1), "Shish": random.uniform(0, 1)},
+                        service_val=random.uniform(0, 1),
+                        location_pref={"Urban": random.uniform(0, 1), "Sub": random.uniform(0, 1),"Rural": random.uniform(0, 1)},
+                        pe_happiness=random.uniform(0, 1)):
 
 
         self.e_attributes = ["food_pref", "service_val", "location_pref", "self.pe_happiness"]
@@ -29,21 +31,33 @@ class Customer(object):
 
     # service level currently carries a lot less weight than the other 2 params
     def set_expectations(self, restaurant):
-        self.expected_scores.push({"restaurant": restaurant, "expectation":
+        self.expected_scores.append({"restaurant": restaurant, "expectation":
                                                 self.food_pref[restaurant.food_type] + \
                                                self.service_val * restaurant.service_lv + \
                                                self.location_pref[restaurant.location]})
         return
 
-    def score_restaurant(self, restaurant):
-
-        if restaurant.tip:
-            additional_price = random.randint(-10, 10)
-            actual_score = self.expected_scores[restaurant] + additional_price*self.pe_happiness
-            restaurant.score = (restaurant.score*restaurant.n_scores + actual_score)/(restaurant.n_scores+1)
-            restaurant.n_scores += 1
+    def score_restaurant(self, choice):
+        restaurant = self.expected_scores[choice]["restaurant"]
+        additional_price = random.choice([-1, 1])*restaurant.tip
+        actual_score = self.expected_scores[choice]["expectation"] + additional_price*self.pe_happiness
+        restaurant.score = (restaurant.score*restaurant.n_scores + actual_score)/(restaurant.n_scores+1)
+        restaurant.n_scores += 1
         return
 
-
-
-
+    def mutate(self):
+        # choose from four attributes & make random change of >+/-10%
+        rand = random.randint(1,4)
+        if rand == 1:
+            self.food_pref["Pizza"] += random.uniform[-0.1,0.1]
+            self.food_pref["Indian"] += random.uniform[-0.1, 0.1]
+            self.food_pref["Burger"] += random.uniform[-0.1, 0.1]
+            self.food_pref["Shish"] += random.uniform[-0.1, 0.1]
+        elif rand == 2:
+            self.service_val += random.uniform[-0.1,0.1]
+        elif rand == 3:
+            self.location_pref["Urban"] += random.uniform[-0.1,0.1]
+            self.location_pref["Sub"] += random.uniform[-0.1, 0.1]
+            self.location_pref["Rural"] += random.uniform[-0.1, 0.1]
+        else:
+            self.pe_happiness += random.uniform[-0.1, 0.1]
