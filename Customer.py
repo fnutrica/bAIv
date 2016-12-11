@@ -31,9 +31,9 @@ class Customer(object):
     # service level currently carries a lot less weight than the other 2 params
     def set_expectations(self, restaurant):
         self.expected_scores.append({"restaurant": restaurant, "expectation":
-                                                self.food_pref[restaurant.food_type] + \
-                                               self.service_val * restaurant.service_lv + \
-                                               self.location_pref[restaurant.location]})
+            self.food_pref[restaurant.food_type] + \
+            self.service_val * restaurant.service_lv + \
+            self.location_pref[restaurant.location]})
         return
 
     def score_restaurant(self, choice):
@@ -46,17 +46,18 @@ class Customer(object):
 
     def mutate(self):
         # choose from four attributes & make random change of >+/-10%
+
         rand = random.randint(1,4)
         if rand == 1:
-            self.food_pref["Pizza"] += random.uniform[-0.1,0.1]
-            self.food_pref["Indian"] += random.uniform[-0.1, 0.1]
-            self.food_pref["Burger"] += random.uniform[-0.1, 0.1]
-            self.food_pref["Shish"] += random.uniform[-0.1, 0.1]
+            self.food_pref["Pizza"] += random.uniform(-0.1,0.1)
+            self.food_pref["Indian"] += random.uniform(-0.1, 0.1)
+            self.food_pref["Burger"] += random.uniform(-0.1,0.1)
+            self.food_pref["Shish"] += random.uniform(-0.1,0.1)
         elif rand == 2:
-            self.service_val += random.uniform[-0.1,0.1]
+            self.service_val += random.uniform(-0.1,0.1)
         elif rand == 3:
-            self.location_pref["Urban"] += random.uniform[-0.1,0.1]
-            self.location_pref["Sub"] += random.uniform[-0.1, 0.1]
-            self.location_pref["Rural"] += random.uniform[-0.1, 0.1]
+            self.location_pref["Urban"] += random.uniform(-0.1,0.1)
+            self.location_pref["Sub"] += random.uniform(-0.1,0.1)
+            self.location_pref["Rural"] += random.uniform(-0.1,0.1)
         else:
-            self.pe_happiness += random.uniform[-0.1, 0.1]
+            self.pe_happiness += random.uniform(-0.1,0.1)

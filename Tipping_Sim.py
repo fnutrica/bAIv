@@ -44,8 +44,6 @@ def tipping_sim():
                     values.append(customer.expected_scores[i]["expectation"])
 
                 choice = rouletteSelect(values)
-                print("my choice is " + str(choice))
-
                 # updates restaurant's score
                 customer.score_restaurant(choice)
 
@@ -54,8 +52,7 @@ def tipping_sim():
         # evolve restaurant
         restaurantScores = [restaurant.score for restaurant in restaurant_pop]
         newRestaurants = evolve(restaurant_pop, restaurantScores)
-        restaurant_pop.clear()
-        restaurant_pop.extend(newRestaurants)
+        restaurant_pop = newRestaurants
 
         # print restaurant attributes
         printRestaurants(restaurant_pop)
@@ -66,21 +63,19 @@ def tipping_sim():
         print("Min score:", min(restaurantScores))
 
         # randomly evolve customer (constant heuristics)
-        customerHeuristics = [customer.heuristic for customer in customer_pop]
+        customerHeuristics = []
+        for customer in customer_pop:
+            customerHeuristics.append(1)
         newCustomers = evolve(customer_pop, customerHeuristics)
-        customer_pop.clear()
-        customer_pop.extend(newCustomers)
+        customer_pop = newCustomers
 
     print("================ Done ================")
 
     return count
 
 def evolve(pop, heuristic):
-    newPop = []
     parentPool = selectParents(pop, heuristic)
-    currPop = mateParents(parentPool)
-    newPop.extend(currPop)
-    return newPop
+    return mateParents(parentPool)
 
 def printRestaurants(neighList):
     for neigh in neighList:
@@ -130,24 +125,19 @@ def mateParents(parents):
         doMutate = random.random()
 
         # 50% chance of mutation
-        if doMutate <= 0.5:
-            newPop[i] = nextOne.mutate()
 
+        if doMutate <= 0.5:
+            nextOne.mutate()
+            newPop[i] = nextOne
     return newPop
 
 def crossover(agent1, agent2, n_cross):
 
     targets = random.sample(range(0,N_ATTRIBUTES),n_cross)
 
-    print(targets)
-
     for i in targets:
         attribute1 = agent1.get_e_attribute(i)
         attribute2 = agent2.get_e_attribute(i)
-
-        print(attribute1)
-        print(attribute2)
-
         agent1.set_e_attribute(i, attribute2)
         agent2.set_e_attribute(i, attribute1)
 

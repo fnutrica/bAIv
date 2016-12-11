@@ -2,6 +2,7 @@ import random
 
 FOOD_TYPE = {"Pizza": 20, "Burger": 25, "Indian": 30, "Shish": 35}
 LOCATION = {"Urban": 30, "Sub": 25, "Rural": 20}
+print("foods list")
 
 class Restaurant(object):
 
@@ -67,21 +68,12 @@ class Restaurant(object):
     def mutate(self):
 
         # choose from four attributes & make random change of >+/-10%
-        #rand = random.randint(0,3)
-        rand=2
+        rand = random.randint(0,3)
         if rand == 0:
-            print("I am the service lv")
-            print(self.food_type)
-            FOOD_TYPE[self.food_type] += random.randint[-2,2]
+            FOOD_TYPE[self.food_type] += random.randint(-2,2)
         elif rand == 1:
-            print("I am the service lv")
-            print(self.location)
-            LOCATION[self.location] += random.randint[-2,2]
+            LOCATION[self.location] += random.randint(-2,2)
         elif rand == 2:
-            print("I am the service lv")
-            print(self.service_lv)
-            self.service_lv += random.uniform[-0.1,0.1]
+            self.service_lv += random.uniform(-0.1,0.1)
         else:
-            print("I am the service lv")
-            print(self.tip)
-            self.tip += random.randint[-5,5]
+            self.tip += random.randint(-5,5)
