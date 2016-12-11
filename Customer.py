@@ -19,14 +19,14 @@ class Customer(object):
         return self.e_attributes[index]
 
     def set_e_attribute(self, index, attribute):
-        if index == 1:
-            self.food_type = attribute
+        if index == 0:
+            self.food_pref = attribute
+        elif index == 1:
+            self.service_val = attribute
         elif index == 2:
-            self.location = attribute
-        elif index == 3:
-            self.service_lv = attribute
+            self.location_pref = attribute
         else:
-            self.tip = attribute
+            self.pe_happiness = attribute
 
     # service level currently carries a lot less weight than the other 2 params
     def set_expectations(self, restaurant):

@@ -18,7 +18,7 @@ class Restaurant(object):
         self.food_type = food_type
         self.location = location
         self.tip = tip
-        self.e_attributes = [self.food_type, self.location, self.service_lv, self.tip]
+        self.e_attributes = [self.food_type, self.service_lv, self.location, self.tip]
 
         # Tip (80% chance to be tipping restaurant)
         if self.tip > 80:
@@ -30,12 +30,12 @@ class Restaurant(object):
         return self.e_attributes[index]
 
     def set_e_attribute(self, index, attribute):
-        if index == 1:
+        if index == 0:
             self.food_type = attribute
+        elif index == 1:
+            self.service_lv = attribute
         elif index == 2:
             self.location = attribute
-        elif index == 3:
-            self.service_lv = attribute
         else:
             self.tip = attribute
 
@@ -70,12 +70,18 @@ class Restaurant(object):
         #rand = random.randint(0,3)
         rand=2
         if rand == 0:
+            print("I am the service lv")
+            print(self.food_type)
             FOOD_TYPE[self.food_type] += random.randint[-2,2]
         elif rand == 1:
+            print("I am the service lv")
+            print(self.location)
             LOCATION[self.location] += random.randint[-2,2]
         elif rand == 2:
             print("I am the service lv")
             print(self.service_lv)
             self.service_lv += random.uniform[-0.1,0.1]
         else:
+            print("I am the service lv")
+            print(self.tip)
             self.tip += random.randint[-5,5]
