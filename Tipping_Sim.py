@@ -126,20 +126,24 @@ def mateParents(parents):
 
         # 50% chance of mutation
 
-        if doMutate <= 0.5:
+        if doMutate <= 0.1:
             nextOne.mutate()
             newPop[i] = nextOne
     return newPop
 
 def crossover(agent1, agent2, n_cross):
 
-    targets = random.sample(range(0,N_ATTRIBUTES),n_cross)
+    prob_cross = random.randint(0,100)
 
-    for i in targets:
-        attribute1 = agent1.get_e_attribute(i)
-        attribute2 = agent2.get_e_attribute(i)
-        agent1.set_e_attribute(i, attribute2)
-        agent2.set_e_attribute(i, attribute1)
+    if prob_cross <= 101: #for future use
+
+        targets = random.sample(range(0,N_ATTRIBUTES),n_cross)
+
+        for i in targets:
+            attribute1 = agent1.get_e_attribute(i)
+            attribute2 = agent2.get_e_attribute(i)
+            agent1.set_e_attribute(i, attribute2)
+            agent2.set_e_attribute(i, attribute1)
 
     return [agent1, agent2]
 
