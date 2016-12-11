@@ -1,5 +1,4 @@
 import random
-import math
 import Customer
 import Restaurant
 
@@ -9,6 +8,7 @@ MIN = 0
 N_RESTAURANTS = 10
 N_CUSTOMERS = 20
 MAX_GENERATIONS = 10
+N_ATTRIBUTES = 4 # exactly 4 attributes for both Customer & Restaurant
 
 def tipping_sim():
 
@@ -16,13 +16,15 @@ def tipping_sim():
     restaurant_pop = []
 
     # generate random population
-    customer_pop.extend(generate_random_pop(N_CUSTOMERS, Customer))
-    restaurant_pop.extend(generate_random_pop(N_RESTAURANTS, Restaurant))
+    for i in range(N_CUSTOMERS):
+        customer_pop.append(Customer.Customer())
+    for i in range(N_RESTAURANTS):
+        restaurant_pop.append(Restaurant.Restaurant())
 
     print("================ Initial States ================")
 
     # for printing
-    for i in range(0,len(restaurant_pop)-1):
+    for i in range(len(restaurant_pop)):
         current = restaurant_pop[i]
         print("Restaurant #", i)
         current.printRestaurant()
@@ -31,14 +33,14 @@ def tipping_sim():
     while count < MAX_GENERATIONS:
         count += 1
 
-        # for customer choosing restaurant
+        # customer chooses restaurant
         for customer in customer_pop:
             for restaurant in restaurant_pop:
                 customer.set_expectations(restaurant)
 
                 values = []
 
-                for i in range(0, len(customer.expected_scores) - 1):
+                for i in range(len(customer.expected_scores)):
                     values.append(customer.expected_scores[i].expectation)
 
                 index = rouletteSelect(values)
@@ -58,6 +60,7 @@ def tipping_sim():
         # print restaurant attributes
         printRestaurants(restaurant_pop)
 
+        # print generation summary
         print("Average score:", sum(restaurantScores) / len(restaurantScores))
         print("Max score:", max(restaurantScores))
         print("Min score:", min(restaurantScores))
@@ -69,17 +72,8 @@ def tipping_sim():
         customer_pop.extend(newCustomers)
 
     print("================ Done ================")
-    print("Summary...")
-    print("Tipping Restaurant Customers: ")
-    print("Non-Tipping Restaurant Customers: ")
 
     return count
-
-def generate_random_pop(n, object):
-    pop = []
-    for i in range(0, n):
-        pop.append(object.object())
-    return pop
 
 def evolve(pop, heuristic):
     newPop = []
@@ -87,9 +81,6 @@ def evolve(pop, heuristic):
     currPop = mateParents(parentPool)
     newPop.extend(currPop)
     return newPop
-
-def random_behavior():
-    return random.uniform(-1, 1)
 
 def printRestaurants(neighList):
     for neigh in neighList:
@@ -115,35 +106,44 @@ def selectParents(states, fitnesses):
         parents.append(states[nextParentPos])
     return parents
 
-#############CHANGE THIS TO MATCH THE NEW CLASSES##############
 def mateParents(parents):
     newPop = []
+
+    # select parents for crossover
     for i in range(0, len(parents), 2):
         p1 = parents[i]
         p2 = parents[i+1]
 
-        newOnes = crossover(p1, p2)
-        newPop.extend(newOnes)
+        # exactly 4 attributes to be swapped for both Customer and Restaurant
+        n_cross = random.choice(0, N_ATTRIBUTES)
 
+        if n_cross == 0:
+            newPop.append(p1)
+            newPop.append(p2)
+        else:
+            newOnes = crossover(p1, p2, n_cross)
+            newPop.extend(newOnes)
+
+    # mutate child
     for i in range(len(newPop)):
         nextOne = newPop[i]
         doMutate = random.random()
 
+        # 50% chance of mutation
         if doMutate <= 0.5:
             newPop[i] = nextOne.mutation()
 
     return newPop
 
-# cross point? not random right now bc there's only 2 variables
-def crossover(customer1, customer2):
-    pref1 = customer1.preference
-    tip1 = customer1.minTip
-    pref2 = customer2.preference
-    tip2 = customer2.minTip
+def crossover(agent1, agent2, n_cross):
 
-    #new random behavior assigned
-    behav = random_behavior()
-    newCust1 = Customer.Customer(pref1, tip2, behav, PRICE)
-    newCust2 = Customer.Customer(pref2, tip1, behav, PRICE)
+    targets = random.sample(0,N_ATTRIBUTES-1,n_cross)
 
-    return [newCust1, newCust2]
+    for i in targets:
+        attribute1 = agent1.get_e_attribute(i)
+        attribute2 = agent2.get_e_attribute(i)
+
+        agent1.set_e_attribute(i, attribute2)
+        agent2.set_e_attribute(i, attribute1)
+
+    return [agent1, agent2]

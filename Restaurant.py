@@ -6,46 +6,35 @@ LOCATION = {"Urban": 30, "Sub": 25, "Rural": 20}
 
 class Restaurant(object):
 
-    def __init__(self, score=0, food_type=None, location=None, service_lv=None, tip=None):
-
-        # Resturant Score
-        if score != 0:
-            self.score = score
-        else:
-            self.score = 2.5
-
-        # Service Level
-        if service_lv is not None:
-            self.service_lv = service_lv
-        else:
-            self.service_lv = random.randint(0, 100)
-
-        # Food Type
-        if food_type is not None:
-            self.food_type = food_type
-        else:
-            self.food_type = random.choice(FOOD_TYPE.keys())
-
-        # Location
-        if location is not None:
-            self.location = location
-        else:
-            self.location = random.choice(LOCATION.keys())
-
-
-        # Tip (80% chance of being tipping restaurant)
-        if tip is not None:
-            self.tip = tip
-        else:
-            rand = random.randint(0, 100)
-            if rand > 80:
-                self.tip = False
-            else:
-                self.tip = True
-
+    def __init__(self, food_type=random.choice(FOOD_TYPE.keys()), location=random.choice(LOCATION.keys()), service_lv=random.uniform(0, 1), tip = random.randint(0, 100)):
         self.price = self.unit_price()
         self.cost = self.unit_cost()
+        self.score = 2.5
         self.n_scores = 0
+        self.e_attributes = ["food_type", "location", "service_lv", "tip"] # can i have just the names as string?????
+
+        self.service_lv = service_lv
+        self.food_type = food_type
+        self.location = location
+
+        # Tip (80% chance to be tipping restaurant)
+        if self.tip > 80:
+            self.tip = False
+        else:
+            self.tip = True
+
+    def get_e_attribute(self, index):
+        return self.e_attributes[index]
+
+    def set_e_attribute(self, index, attribute):
+        if index == 1:
+            self.food_type = attribute
+        elif index == 2:
+            self.location = attribute
+        elif index == 3:
+            self.service_lv = attribute
+        else:
+            self.tip = attribute
 
     def unit_price(self):
         self.price = 100
