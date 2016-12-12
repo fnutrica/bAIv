@@ -2,6 +2,17 @@ import random
 
 PRICE = 100
 
+PIZZA_COST = 2
+BURGER_COST = 2.2
+INDIAN_COST = 2.5
+SHISH_COST = 2.7
+ASIAN_COST = 3
+
+CITY_RENT = 45
+URBAN_RENT = 40
+SUB_RENT = 30
+RURAL_RENT = 20
+
 
 class Restaurant(object):
     def __init__(self, food_type=None,
@@ -11,8 +22,8 @@ class Restaurant(object):
                  profit=0,
                  units_sold=None):
 
-        FOOD_TYPE = {"Pizza": 20, "Burger": 25, "Indian": 30, "Shish": 35}
-        LOCATION = {"Urban": 30, "Sub": 25, "Rural": 20}
+        FOOD_TYPE = {"Pizza ": PIZZA_COST, "Burger": BURGER_COST, "Indian": INDIAN_COST, "Shish ": SHISH_COST, "Asian ": ASIAN_COST}
+        LOCATION = {"City ": CITY_RENT, "Urban": URBAN_RENT, "Sub  ": SUB_RENT, "Rural": RURAL_RENT}
 
         self.price = self.unit_price()
         self.score = 2.5
@@ -69,8 +80,8 @@ class Restaurant(object):
 
     def total_cost(self, q_sold):
         # Cost of Food
-        FOOD_TYPE = {"Pizza": 20, "Burger": 25, "Indian": 30, "Shish": 35}
-        LOCATION = {"Urban": 30, "Sub": 25, "Rural": 20}
+        FOOD_TYPE = {"Pizza ": PIZZA_COST, "Burger": BURGER_COST, "Indian": INDIAN_COST, "Shish ": SHISH_COST, "Asian ": ASIAN_COST}
+        LOCATION = {"City ": CITY_RENT, "Urban": URBAN_RENT, "Sub  ": SUB_RENT, "Rural": RURAL_RENT}
         food = FOOD_TYPE.get(self.food_type)
 
         # Cost of Rent
@@ -84,11 +95,8 @@ class Restaurant(object):
         return self.cost
 
     def printRestaurant(self):
-        print("Score = ", self.score)
-        print("Food Type = ", self.food_type)
-        print("Location = ", self.location)
-        print("Service Level = ", self.service_lv)
-        print("Profit = ", self.profit)
+        print("Score =", "%.2f"%self.score, "     Food Type =", self.food_type, "     Location =", self.location, 
+              "     Service Level =", "%.2f"%self.service_lv, "     Profit =", round(self.profit))
 
     def mutate(self):
         # choose from four attributes & make random change of >+/-10%

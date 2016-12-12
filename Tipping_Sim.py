@@ -5,8 +5,8 @@ import Restaurant
 PRICE = Restaurant.PRICE
 MAX = 1
 MIN = 0
-N_RESTAURANTS = 10
-N_CUSTOMERS = 20
+N_RESTAURANTS = 100
+N_CUSTOMERS = 1000
 MAX_GENERATIONS = 10
 N_ATTRIBUTES = 4  # exactly 4 attributes for both Customer & Restaurant
 
@@ -27,8 +27,8 @@ def tipping_sim():
     # for printing
     for i in range(len(restaurant_pop)):
         current = restaurant_pop[i]
-        print("Restaurant #", i)
         current.printRestaurant()
+    print("")
 
     count = 0
     while count < MAX_GENERATIONS:
@@ -48,23 +48,34 @@ def tipping_sim():
 
         # evolve restaurant
         restaurantScores = [restaurant.score for restaurant in restaurant_pop]
-        newRestaurants = evolve(restaurant_pop, restaurantScores)
-        restaurant_pop = newRestaurants
+        parentRestaurants = selectParents(restaurant_pop, restaurantScores)
+
+        n = 0
+        for r in restaurant_pop:
+            if parentRestaurants.__contains__(r):
+                n += 1
+        print("There are ", n, " same Restaurants in parentPool")
+
+        restaurant_pop = mateParents(parentRestaurants)
 
         # print restaurant attributes
         printRestaurants(restaurant_pop)
 
+
         # print generation summary
-        print("Average score:", sum(restaurantScores) / len(restaurantScores))
-        print("Max score:", max(restaurantScores))
-        print("Min score:", min(restaurantScores))
+        print("")
+        print("Average score:", "%.2f"%(sum(restaurantScores) / len(restaurantScores)))
+        print("Max score    :", "%.2f"%(max(restaurantScores)))
+        print("Min score    :", "%.2f"%(min(restaurantScores)))
+        print("")
 
         # randomly evolve customer (constant heuristics)
         customerHeuristics = []
         for customer in customer_pop:
             customerHeuristics.append(1)
-        newCustomers = evolve(customer_pop, customerHeuristics)
-        customer_pop = newCustomers
+
+        parentCustomers = selectParents(customer_pop, customerHeuristics)
+        customer_pop = mateParents(parentCustomers)
 
     id = 1
     for restaurant in restaurant_pop:
@@ -74,12 +85,6 @@ def tipping_sim():
     print("================ Done ================")
 
     return sim_results
-
-
-def evolve(pop, heuristic):
-    parentPool = selectParents(pop, heuristic)
-    return mateParents(parentPool)
-
 
 def printRestaurants(neighList):
     for neigh in neighList:
