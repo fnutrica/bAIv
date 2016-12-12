@@ -20,6 +20,7 @@ class Restaurant(object):
                  service_lv=None,
                  tip=None,
                  profit=0,
+                 marginal_profit=0,
                  units_sold=None):
 
         FOOD_TYPE = {"Pizza ": PIZZA_COST, "Burger": BURGER_COST, "Indian": INDIAN_COST, "Shish ": SHISH_COST, "Asian ": ASIAN_COST}
@@ -57,6 +58,7 @@ class Restaurant(object):
                 self.tip = 0
 
         self.profit = profit
+        self.marginal_profit = marginal_profit
 
         # Tip (80% chance to be tipping restaurant)
         self.e_attributes = [self.food_type, self.service_lv, self.location, self.tip]

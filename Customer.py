@@ -56,6 +56,7 @@ class Customer(object):
         restaurant.score = (restaurant.score*restaurant.n_scores + actual_score)/(restaurant.n_scores+1)
         restaurant.n_scores += 1
         restaurant.profit = restaurant.profit + PRICE + additional_price
+        restaurant.marginal_profit = PRICE + additional_price
         #print ("n_scores is "+ str(restaurant.n_scores))
         #print ("score is " + str(restaurant.score))
         return

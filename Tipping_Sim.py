@@ -5,7 +5,7 @@ import Restaurant
 PRICE = Restaurant.PRICE
 MAX = 1
 MIN = 0
-N_RESTAURANTS = 100
+N_RESTAURANTS = 30
 N_CUSTOMERS = 1000
 MAX_GENERATIONS = 10
 N_ATTRIBUTES = 4  # exactly 4 attributes for both Customer & Restaurant
@@ -47,15 +47,8 @@ def tipping_sim():
         print("================ Generation ", count, " ================")
 
         # evolve restaurant
-        restaurantScores = [restaurant.score for restaurant in restaurant_pop]
+        restaurantScores = [restaurant.profit for restaurant in restaurant_pop]
         parentRestaurants = selectParents(restaurant_pop, restaurantScores)
-
-        n = 0
-        for r in restaurant_pop:
-            if parentRestaurants.__contains__(r):
-                n += 1
-        print("There are ", n, " same Restaurants in parentPool")
-
         restaurant_pop = mateParents(parentRestaurants)
 
         # print restaurant attributes
@@ -84,7 +77,8 @@ def tipping_sim():
 
     print("================ Done ================")
 
-    
+    print("")
+
     return sim_results
 
 def printRestaurants(neighList):
