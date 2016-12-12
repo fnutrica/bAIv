@@ -84,6 +84,7 @@ def tipping_sim():
 
     print("================ Done ================")
 
+    
     return sim_results
 
 def printRestaurants(neighList):

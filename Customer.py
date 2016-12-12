@@ -26,8 +26,8 @@ class Customer(object):
         if pe_happiness is not None:
             self.pe_happiness = pe_happiness
         else:
-            self.pe_happiness = random.uniform(0, 1)
-
+            self.pe_happiness = random.uniform(0, 0.1)
+            #self.pe_happiness = random.uniform(0, 0.1)
         self.expected_scores = []
         self.e_attributes = [self.food_pref, self.service_val, self.location_pref, self.pe_happiness]
 

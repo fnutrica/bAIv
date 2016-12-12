@@ -52,8 +52,8 @@ class Restaurant(object):
         if tip is not None:
             self.tip = tip
         else:
-            self.tip = random.randint(0, 100)
-            if self.tip > 80:
+            self.tip = random.uniform(0, 1)
+            if self.tip > 0.8:
                 self.tip = 0
 
         self.profit = profit
