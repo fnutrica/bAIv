@@ -13,22 +13,26 @@ URBAN_RENT = 40
 SUB_RENT = 30
 RURAL_RENT = 20
 
-
 class Restaurant(object):
-    def __init__(self, food_type=None,
+    def __init__(self, 
+                 food_type=None,
                  location=None,
                  service_lv=None,
                  tip=None,
+                 tipping=True,
                  profit=0,
                  marginal_profit=0,
-                 units_sold=None):
+                 units_sold=None,
+                 ):
 
-        FOOD_TYPE = {"Pizza ": PIZZA_COST, "Burger": BURGER_COST, "Indian": INDIAN_COST, "Shish ": SHISH_COST, "Asian ": ASIAN_COST}
+        FOOD_TYPE = {"Pizza  ": PIZZA_COST, "Burger ": BURGER_COST, "African": INDIAN_COST, "Shish  ": SHISH_COST,
+                     "Asian  ": ASIAN_COST}
         LOCATION = {"City ": CITY_RENT, "Urban": URBAN_RENT, "Sub  ": SUB_RENT, "Rural": RURAL_RENT}
 
         self.price = self.unit_price()
         self.score = 2.5
         self.n_scores = 0
+        
 
         if units_sold is not None:
             self.units_sold = units_sold
@@ -44,11 +48,13 @@ class Restaurant(object):
             self.food_type = food_type
         else:
             self.food_type = random.choice(list(FOOD_TYPE.keys()))
-
+        
         if location is not None:
             self.location = location
         else:
             self.location = random.choice(list(LOCATION.keys()))
+
+        self.tipping = tipping
 
         if tip is not None:
             self.tip = tip
@@ -56,12 +62,23 @@ class Restaurant(object):
             self.tip = random.uniform(0, 1)
             if self.tip > 0.8:
                 self.tip = 0
-
+                self.tipping = False
+                
+                
         self.profit = profit
-        self.marginal_profit = marginal_profit
+        
+        if marginal_profit != 0:
+            if marginal_profit > self.marginal_profit:
+                self.marginal_profit = marginal_profit
+        else:
+            self.marginal_profit = marginal_profit
 
         # Tip (80% chance to be tipping restaurant)
         self.e_attributes = [self.food_type, self.service_lv, self.location, self.tip]
+
+    def update_tipping(self):
+        if self.tip > 0.8:
+            self.tipping = False
 
     def get_e_attribute(self, index):
         return self.e_attributes[index]
@@ -80,9 +97,10 @@ class Restaurant(object):
         self.price = 100
         return self.price
 
-    def total_cost(self, q_sold):
+    def total_cost(self):
         # Cost of Food
-        FOOD_TYPE = {"Pizza ": PIZZA_COST, "Burger": BURGER_COST, "Indian": INDIAN_COST, "Shish ": SHISH_COST, "Asian ": ASIAN_COST}
+        FOOD_TYPE = {"Pizza  ": PIZZA_COST, "Burger ": BURGER_COST, "African": INDIAN_COST, "Shish  ": SHISH_COST,
+                     "Asian  ": ASIAN_COST}
         LOCATION = {"City ": CITY_RENT, "Urban": URBAN_RENT, "Sub  ": SUB_RENT, "Rural": RURAL_RENT}
         food = FOOD_TYPE.get(self.food_type)
 
@@ -92,13 +110,14 @@ class Restaurant(object):
         # Cost of Labor
         labor = int(self.service_lv * 0.3)
 
-        self.cost = food * q_sold + rent + labor * q_sold
+        newCost = food * self.n_scores + rent + labor * self.n_scores
 
-        return self.cost
+        return newCost
 
     def printRestaurant(self):
         print("Score =", "%.2f"%self.score, "     Food Type =", self.food_type, "     Location =", self.location, 
-              "     Service Level =", "%.2f"%self.service_lv, "     Profit =", round(self.profit))
+              "     Service Level =", "%.2f"%self.service_lv, "     Max MP =", round(self.marginal_profit),
+              "     N Customers =", self.n_scores,"     Profit =", round(self.profit))
 
     def mutate(self):
         # choose from four attributes & make random change of >+/-10%
@@ -107,3 +126,5 @@ class Restaurant(object):
             self.service_lv += random.uniform(-0.1, 0.1)
         else:
             self.tip += random.randint(-5, 5)
+            if self.tip < 0:
+                self.tip = 0

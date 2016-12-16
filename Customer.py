@@ -11,7 +11,7 @@ class Customer(object):
         if food_pref is not None:
             self.food_pref = food_pref
         else:
-            self.food_pref = {"Pizza ": random.uniform(0, 1), "Indian": random.uniform(0, 1), "Burger": random.uniform(0, 1), "Shish ": random.uniform(0, 1), "Asian ": random.uniform(0, 1)}
+            self.food_pref = {"Pizza  ": random.uniform(0, 1), "African": random.uniform(0, 1), "Burger ": random.uniform(0, 1), "Shish  ": random.uniform(0, 1), "Asian  ": random.uniform(0, 1)}
 
         if service_val is not None:
             self.service_val = service_val
@@ -56,7 +56,7 @@ class Customer(object):
         restaurant.score = (restaurant.score*restaurant.n_scores + actual_score)/(restaurant.n_scores+1)
         restaurant.n_scores += 1
         restaurant.profit = restaurant.profit + PRICE + additional_price
-        restaurant.marginal_profit = PRICE + additional_price
+        restaurant.marginal_profit = PRICE + additional_price - restaurant.total_cost()/restaurant.n_scores
         #print ("n_scores is "+ str(restaurant.n_scores))
         #print ("score is " + str(restaurant.score))
         return
@@ -70,15 +70,15 @@ class Customer(object):
 
         if randAttr == 1:
             if randFood == 1:
-                self.food_pref["Pizza "] += random.uniform(-0.05,0.05)
+                self.food_pref["Pizza  "] += random.uniform(-0.05,0.05)
             elif randFood == 2:
-                self.food_pref["Indian"] += random.uniform(-0.05,0.05)
+                self.food_pref["African"] += random.uniform(-0.05,0.05)
             elif randFood == 3:
-                self.food_pref["Burger"] += random.uniform(-0.05,0.05)
+                self.food_pref["Burger "] += random.uniform(-0.05,0.05)
             elif randFood == 4:
-                self.food_pref["Shish "] += random.uniform(-0.05,0.05)
+                self.food_pref["Shish  "] += random.uniform(-0.05,0.05)
             else:
-                self.food_pref["Asian "] += random.uniform(-0.05,0.05)
+                self.food_pref["Asian  "] += random.uniform(-0.05,0.05)
         elif randAttr == 2:
             self.service_val += random.uniform(-0.05,0.05)
         elif randAttr == 3:

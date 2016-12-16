@@ -3,13 +3,14 @@ import Customer
 import Restaurant
 
 PRICE = Restaurant.PRICE
-MAX = 1
-MIN = 0
-N_RESTAURANTS = 30
-N_CUSTOMERS = 1000
-MAX_GENERATIONS = 10
-N_ATTRIBUTES = 4  # exactly 4 attributes for both Customer & Restaurant
+N_RESTAURANTS = 50
+N_CUSTOMERS = 100
+N_ATTRIBUTES = 4  # exactly 4 attributes to be crossed for both Customer & Restaurant
+MAX_GENERATIONS = 50
 
+RESTAURANT_TYPES = ["Pizza  ", "Burger ", "African", "Shish  ", "Asian  "]
+TYPE_COUNTS = {"Pizza  ": 0, "Burger ": 0, "African": 0, "Shish  ": 0,"Asian  ": 0}
+TIPPING_COUNTS = {"Pizza  ": 0, "Burger ": 0, "African": 0, "Shish  ": 0,"Asian  ": 0}
 
 def tipping_sim():
     sim_results = {}
@@ -21,6 +22,8 @@ def tipping_sim():
         customer_pop.append(Customer.Customer())
     for i in range(N_RESTAURANTS):
         restaurant_pop.append(Restaurant.Restaurant())
+
+    countRestaurants(restaurant_pop)
 
     print("================ Initial States ================")
 
@@ -47,19 +50,18 @@ def tipping_sim():
         print("================ Generation ", count, " ================")
 
         # evolve restaurant
-        restaurantScores = [restaurant.profit for restaurant in restaurant_pop]
-        parentRestaurants = selectParents(restaurant_pop, restaurantScores)
+        restaurantProfits = [restaurant.profit for restaurant in restaurant_pop]
+        parentRestaurants = selectParents(restaurant_pop, restaurantProfits)
         restaurant_pop = mateParents(parentRestaurants)
 
         # print restaurant attributes
         printRestaurants(restaurant_pop)
 
-
         # print generation summary
         print("")
-        print("Average score:", "%.2f"%(sum(restaurantScores) / len(restaurantScores)))
-        print("Max score    :", "%.2f"%(max(restaurantScores)))
-        print("Min score    :", "%.2f"%(min(restaurantScores)))
+        print("Average profit:", round((sum(restaurantProfits) / len(restaurantProfits))))
+        print("Max profit    :", round(max(restaurantProfits)))
+        print("Min profit    :", round(min(restaurantProfits)))
         print("")
 
         # randomly evolve customer (constant heuristics)
@@ -75,16 +77,52 @@ def tipping_sim():
         sim_results["restaurant " + str(id)] = {"profit": restaurant.profit}
         id += 1
 
-    print("================ Done ================")
+    print("================ Summary ================")
+
+    print("Generations :", count)
+    print("Restaurants :", N_RESTAURANTS)
+    print("Customers   :", N_CUSTOMERS)
+    print("")
+    print("Initial Restaurant Counts...")
+    for i in range(5):
+        print(RESTAURANT_TYPES[i], ":", TYPE_COUNTS[RESTAURANT_TYPES[i]], "    Tipping  :",
+            TIPPING_COUNTS[RESTAURANT_TYPES[i]])
+
+    resetCounts()
+    countRestaurants(restaurant_pop)
 
     print("")
+    print("Final Restaurant Counts...")
+    for i in range(5):
+        print(RESTAURANT_TYPES[i], ":", TYPE_COUNTS[RESTAURANT_TYPES[i]], "    Tipping  :",
+            TIPPING_COUNTS[RESTAURANT_TYPES[i]])
 
-    return sim_results
+    #return sim_results
 
 def printRestaurants(neighList):
     for neigh in neighList:
         neigh.printRestaurant()
 
+def countRestaurants(restaurant_pop):
+    global RESTAURANT_TYPES, TYPE_COUNTS
+    for r in restaurant_pop:
+        r.update_tipping()
+        for i in range(5):
+            if r.food_type == RESTAURANT_TYPES[i]:
+                TYPE_COUNTS[RESTAURANT_TYPES[i]] += 1
+                countTipping(r)
+
+def resetCounts():
+    global TYPE_COUNTS, TIPPING_COUNTS
+    newDict1 = TYPE_COUNTS.fromkeys(TYPE_COUNTS, 0)
+    newDict2 = TIPPING_COUNTS.fromkeys(TIPPING_COUNTS, 0)
+    TYPE_COUNTS = newDict1
+    TIPPING_COUNTS = newDict2
+
+def countTipping(restaurant):
+    global TIPPING_COUNTS
+    if restaurant.tipping is True:
+        TIPPING_COUNTS[restaurant.food_type] += 1
 
 # ============================================================================================
 
@@ -138,7 +176,6 @@ def mateParents(parents):
             newPop[i] = nextOne
 
     return newPop
-
 
 def crossover(agent1, agent2, n_cross):
     prob_cross = random.randint(0, 100)
